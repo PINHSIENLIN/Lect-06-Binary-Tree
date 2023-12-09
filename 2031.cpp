@@ -12,7 +12,7 @@ struct Node {
 // Function to print Preorder Traversal
 void printPreorder(Node *temp){
    
-     if (temp == NULL) return ;
+     if (temp == NULL) return;
     cout << temp->data << " ";
     printPreorder(temp->left);
     printPreorder(temp->right);
@@ -21,7 +21,7 @@ void printPreorder(Node *temp){
 // Function to print Inorder Traversal
 void printInorder(Node *temp){
    
-     if (temp == NULL) return ;
+     if (temp == NULL) return;
     printInorder(temp->left);
     cout << temp->data << " ";
     printInorder(temp->right);
@@ -30,7 +30,7 @@ void printInorder(Node *temp){
 // Function to print Postorder Traversal
 void printPostorder(Node *temp){
    
-     if (temp == NULL) return ;
+     if (temp == NULL) return;
     printPostorder(temp->left);
     printPostorder(temp->right);
     cout << temp->data << " ";
