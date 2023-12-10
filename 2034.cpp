@@ -1,3 +1,12 @@
+// Binary search tree insertion algorithm
+// And create a menu to allow users to enter i to add a new node
+// You can enter numbers and insert nodes in numerical order (assuming the numbers entered will not be repeated)
+// enter
+// l can print out the contents of all nodes in inorder
+// m can print out the contents of all nodes in preorder
+// n can print out the contents of all nodes in postorder
+// q Exit the program
+
 #include <iostream>
 using namespace std;
 
@@ -52,7 +61,7 @@ bool search_Preorder(Node *temp, int target){
      return search_Preorder(temp->left, target) || search_Preorder(temp->right, target);
 }
 
-// Utility function to create a new tree node
+// Utility function to create a new tree node for root
 Node* newNode(int data)
 {
     Node* temp = new Node;
@@ -61,27 +70,53 @@ Node* newNode(int data)
     return temp;
 }
 
-int main(){
-    // Level 1
-    Node* root = newNode(5);
-    // Level 2
-    root->left = newNode(4);
-    root->right = newNode(6);
-    // Level 3
-    root->left->left = newNode(2);
-    root->right->right = newNode(8);
-    // Level 4
-    root->left->left->left = newNode(1);
-    root->left->left->right = newNode(3);
-    root->right->right->right = newNode(9);
-    root->right->right->left = newNode(7);
+// Function to insert a node in BST recursively
+Node* insert_binary_tree(Node* temp, int data){
+      
+      // Consider if it is a root 
+      if (temp == NULL){
+        return newNode(data);
+      }
+      
+      // To left subtree
+      if (temp->data > data){
+        temp->left = insert_binary_tree(temp->left, data);
+      }  // To right subtree
+      else if (temp->data < data){
+        temp->right = insert_binary_tree(temp->right, data);
+      }
+     
+     return temp;
+}
 
-    int num;
-    cin >> num;
-    if (search_Preorder(root,num)){
-        cout << endl << "found " << num << endl;
-    } else {
-        cout << endl << "not found" << endl;
+int main(){
+    
+    char choice;
+    int data;
+    Node* root = NULL;
+
+    while (true)
+    {
+        cin >> choice;
+        if (choice == 'i'){
+            cin >> data;
+            root = insert_binary_tree(root,data);
+        }
+        else if (choice == 'l'){
+            printInorder(root);
+            cout << endl;
+        }
+        else if (choice == 'm'){
+            printPreorder(root);
+            cout << endl;
+        }
+        else if (choice == 'n'){
+            printPostorder(root);
+            cout << endl;
+        }
+        else if (choice == 'q'){
+            break;
+        }
     }
     
     return 0;
