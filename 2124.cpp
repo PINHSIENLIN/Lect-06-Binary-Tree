@@ -173,15 +173,12 @@ int main(){
         }
         else if (choice == 'l'){
             printInorder(root);
-            
         }
         else if (choice == 'm'){
-            printPreorder(root);
-            
+            printPreorder(root);   
         }
         else if (choice == 'n'){
-            printPostorder(root);
-            
+            printPostorder(root);   
         }
         else if (choice == 'd'){
             string data;
