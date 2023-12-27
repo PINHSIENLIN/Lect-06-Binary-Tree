@@ -60,7 +60,7 @@ void printPostorder(Node *root){
 Node* searchNode(Node* root, string data) {
   // Base case
     if (root == NULL) {
-        return NULL;
+        return root;
   }
 
   // Compare data with the current node's data
@@ -136,22 +136,17 @@ Node* deleteNode(Node* root, string target){
             return temp;
         }
         // Case 2: One child
-        else if (root->left == NULL){
+        else if (root->right == NULL){
             Node* temp = root->left;
             delete root;
             return temp;
         }
-        else if (root->right == NULL){
-            Node* temp = root;
-            root = root->left;
-            delete temp;
-        }
         // Case 3: Two children
-        else {
+       
             Node* temp = findMinimum(root->right);
             root->name = temp->name;
             root->right = deleteNode(root->right, temp->name);
-        }
+        
     }
     return root;
 }
@@ -184,8 +179,8 @@ int main(){
             string data;
             cin >> data;
             root = deleteNode(root,data);
-            if (root->name == data){
-                cout << "delete " << data << " ok" << endl;
+            if (root != NULL){
+                cout << "delete " << data << " ok" << endl << endl;
             } else {
                 cout << "cannot delete" << endl;
             }
@@ -193,11 +188,12 @@ int main(){
         else if (choice == 'f'){
             string data;
             cin >> data;
-            if (searchNode(root,data) != NULL){
+            Node* result = searchNode(root,data);
+            if (result != NULL){
                 cout << "found:"<< endl;
-                cout << "Name: " << root->right->name << endl;
-                cout << "Phone: " << root->right->phone << endl << endl;
-            } else{
+                cout << "Name: " << result->name << endl;
+                cout << "Phone: " << result->phone << endl << endl;
+            } else {
                 cout << "not found" << endl;
             }
         }
