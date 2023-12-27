@@ -27,8 +27,8 @@ struct Node {
 void printPreorder(Node *root){
    
      if (root == NULL) return;
-    cout << root->name << endl;
-    cout << root->phone << endl;
+    cout << "Name: " << root->name << endl;
+    cout << "Phone: " << root->phone << endl;
     cout << endl;
     printPreorder(root->left);
     printPreorder(root->right);
@@ -39,8 +39,8 @@ void printInorder(Node *root){
    
      if (root == NULL) return ;
     printInorder(root->left);
-    cout << root->name << endl;
-    cout << root->phone << endl;
+    cout << "Name: " << root->name << endl;
+    cout << "Phone: " << root->phone << endl;
     cout << endl;
     printInorder(root->right);
 }
@@ -51,8 +51,8 @@ void printPostorder(Node *root){
      if (root == NULL) return;
     printPostorder(root->left);
     printPostorder(root->right);
-    cout << root->name << endl;
-    cout << root->phone << endl;
+    cout << "Name: " << root->name << endl;
+    cout << "Phone: " << root->phone << endl;
     cout << endl;
 }
 
@@ -107,11 +107,10 @@ Node* insert_binary_tree(Node* root, string name, string phone){
 // Consider a tree has left subtree and right subtree, so need to find the minimum
 // Function to find the minimum node in a subtree
 Node* findMinimum(Node* root){
-       Node* current = root;
-       while (current && current->left){
-           current = current->left;
+       while (root->left != NULL){
+           root = root->left;
        }
-       return current;      
+       return root;      
 }
 
 // Function to delete a node in BST recursively
@@ -119,7 +118,7 @@ Node* deleteNode(Node* root, string target){
     // Base case
     if (root == NULL){
         return root;
-    }
+    } 
     
     // Left Subtree
     if (target < root->name){
@@ -131,15 +130,16 @@ Node* deleteNode(Node* root, string target){
     } 
     else {
         // Case 1: No child
-        if (root->left == NULL && root->right == NULL){
+        if (root->left == NULL){
+            Node* temp = root->right;
             delete root;
-            root = NULL;
+            return temp;
         }
         // Case 2: One child
         else if (root->left == NULL){
-            Node* temp = root;
-            root = root->right;
-            delete temp;
+            Node* temp = root->left;
+            delete root;
+            return temp;
         }
         else if (root->right == NULL){
             Node* temp = root;
@@ -183,7 +183,8 @@ int main(){
         else if (choice == 'd'){
             string data;
             cin >> data;
-            if (deleteNode(root,data) != NULL){
+            root = deleteNode(root,data);
+            if (root->name == data){
                 cout << "delete " << data << " ok" << endl;
             } else {
                 cout << "cannot delete" << endl;
