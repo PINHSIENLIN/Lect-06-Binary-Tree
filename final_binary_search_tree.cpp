@@ -17,12 +17,13 @@ using namespace std;
 
 class Node {
     public:
+        int index;
         string name;
         string phone;
         Node* left;
         Node* right;
     // Constructor to initialize data and next pointer (Member Initialization)
-    Node(string name, string phone) : name(name), phone(phone), left(nullptr), right(nullptr){}
+    Node(int index, string name, string phone) : index(index), name(name), phone(phone), left(nullptr), right(nullptr){}
 };
 
 class BinarySearchTree{
@@ -30,19 +31,19 @@ class BinarySearchTree{
     Node* root;
     
     // Function to insert a node in BST recursively
-    Node* insert(Node* root, string name, string phone){
+    Node* insert(Node* root, int index, string name, string phone){
       
       // Consider if it is a root 
       if (root == NULL){
-        return new Node(name,phone);
+        return new Node(index, name, phone);
       }
       
       // To left subtree
       if (root->name > name){
-        root->left = insert(root->left, name, phone);
+        root->left = insert(root->left, index, name, phone);
       }  // To right subtree
       else if (root->name < name){
-        root->right = insert(root->right, name, phone);
+        root->right = insert(root->right, index, name, phone);
       }
      return root;
     }
@@ -116,9 +117,50 @@ Node* deleteNode(Node* root, string target, bool& found){
     return root;
 }
 
+Node* deleteIndex(Node* root, int target, bool& found){
+    // Base case
+    if (root == NULL){
+        found = false;
+        return root;
+    } 
+    
+    // Left Subtree
+    if (target < root->index){
+        root->left = deleteIndex(root->left, target, found);
+    } 
+    // Right Subtree
+    else if (target > root->index){
+        root->right = deleteIndex(root->right, target, found);
+    } 
+    else {
+        // Case 1: No child
+        if (root->left == NULL){
+            Node* temp = root->right;
+            delete root;
+            found = true;
+            return temp;
+        }
+        // Case 2: One child
+        else if (root->right == NULL){
+            Node* temp = root->left;
+            delete root;
+            found = true;
+            return temp;
+        }
+        // Case 3: Two children
+       
+            Node* temp = findMinimum(root->right);
+            root->index = temp->index;
+            root->right = deleteIndex(root->right, temp->index, found);
+        
+    }
+    return root;
+}
+
    // Function to print Preorder Traversal
     void printPreorder(Node *root){
         if (root == NULL) return;
+        cout << "Index: " << root->index << endl;
         cout << "Name: " << root->name << endl;
         cout << "Phone: " << root->phone << endl;
         cout << endl;
@@ -130,6 +172,7 @@ Node* deleteNode(Node* root, string target, bool& found){
     void printInorder(Node *root){
         if (root == NULL) return ;
         printInorder(root->left);
+        cout << "Index: " << root->index << endl;
         cout << "Name: " << root->name << endl;
         cout << "Phone: " << root->phone << endl;
         cout << endl;
@@ -141,6 +184,7 @@ Node* deleteNode(Node* root, string target, bool& found){
         if (root == NULL) return;
         printPostorder(root->left);
         printPostorder(root->right);
+        cout << "Index: " << root->index << endl;
         cout << "Name: " << root->name << endl;
         cout << "Phone: " << root->phone << endl;
         cout << endl;
@@ -150,8 +194,8 @@ Node* deleteNode(Node* root, string target, bool& found){
   BinarySearchTree() : root(nullptr) {}
 
    // Public method to insert a key into the BST
-    void insert(string name, string phone) {
-        root = insert(root, name, phone);
+    void insert(int index, string name, string phone) {
+        root = insert(root, index, name, phone);
     }
 
     Node* searchNode(string target){
@@ -164,6 +208,17 @@ Node* deleteNode(Node* root, string target, bool& found){
 
         if (found){
             cout << "delete " << target << " ok" << endl << endl;
+        } else {
+            cout << "cannot delete" << endl;
+        }
+    }
+
+    void deleteIndex(int target){
+        bool found = false;
+        root = deleteIndex(root, target, found);
+
+        if (found){
+            cout << "delete Index: " << target << " ok" << endl << endl;
         } else {
             cout << "cannot delete" << endl;
         }
@@ -187,6 +242,7 @@ int main(){
     BinarySearchTree bst;
 
     char choice;
+    int count = 0;
    
     while (true)
     {
@@ -195,7 +251,8 @@ int main(){
             string name, phone;
             cin >> name;
             cin >> phone;
-            bst.insert(name, phone);
+            bst.insert(count, name, phone);
+            count++;
         }
         else if (choice == 'l'){
             cout << "Preorder Traversal: " << endl;
@@ -209,6 +266,11 @@ int main(){
             string data;
             cin >> data;
             bst.deleteNode(data);
+        }
+        else if (choice == 'r'){
+            int data;
+            cin >> data;
+            bst.deleteIndex(data);
         }
         else if (choice == 'f'){
             string data;
@@ -226,14 +288,6 @@ int main(){
             break;
         }
     }
-
-    // bst.insert("Peter","789");
-    // bst.insert("Amy","123456789");
-    // bst.insert("Zac","1234559");
-
-    // bst.printInorder();
-    // bst.printPostorder();
-    // bst.printPreorder();
 
     return 0;
 }
